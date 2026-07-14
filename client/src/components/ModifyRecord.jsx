@@ -15,7 +15,6 @@ export default function Record() {
         async function fetchData() {
             const id = params.id?.toString() || undefined;
             if(!id) return;
-            setIsNew(false);
             const response = await fetch(
                 `http://localhost:5050/record/${params.id.toString()}`
             );
@@ -34,7 +33,7 @@ export default function Record() {
         }
         fetchData();
         return;
-    }), [params.id, navigate]);
+    }, [params.id, navigate]);
 
     // Methods below will UPDATE state properties 
     function updateForm(value) {
@@ -48,26 +47,15 @@ export default function Record() {
         e.preventDefault();
         const person = { ...form };
         try {
-            let response;
-            if (isNew) {
-                // IF we are ADDING a NEW RECORD we POST to /record
-                response = await fetch("http://localhost:5050/record", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(person),
-                });
-            } else {
-                // IF we are UPDATING a RECORD we PATCH to /record/:id
-                response = await fetch(`http://localhost:5050/record/${params.id}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(person),
-                });
-            }
+            // IF ID is present, URL is set to /record/:id, ELSE URL is set to /record
+            const reponse = await fetch(`http://localhost:5050/record${params.id ? "/"+params.id : ""}`, {
+                // IF ID is present, use PATCH method, ELSE use POST method
+                method: `${params.id ? "PATCH" : "POST"}`,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(person),
+            });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
