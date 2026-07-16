@@ -1,6 +1,6 @@
 // Function - Build Amortization Schedule - ACCEPTS 3: Total Principal Borrowed, APR, and Number of Months
 function BuildAmortSchedule(principal, apr, numMonths) {
-    const monthlyPayment = 0; 
+    const monthlyPayment; 
     const monthlyRate = apr / 100 / 12; 
     if (monthlyRate == 0) {
         monthlyPayment = principal / numMonths; 
