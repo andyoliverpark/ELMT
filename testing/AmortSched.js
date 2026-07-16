@@ -6,7 +6,7 @@ function BuildAmortSchedule(principal, apr, numMonths) {
         monthlyPayment = principal / numMonths; 
     } else {
         const factor = Math.pow(1 + monthlyRate, numMonths); 
-        monthlyPayment = (prinicipal * monthlyRate * factor) / (factor - 1); 
+        monthlyPayment = (principal * monthlyRate * factor) / (factor - 1); 
     }
 
     let balance = principal; 
