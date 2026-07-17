@@ -1,0 +1,40 @@
+// Function - Compute Monthly Payment - ACCEPTS 3: Total Principal Borrowed, APR and Number of Months
+function ComputeMonthlyPayment(principal, apr, numMonths) {
+    const monthlyRate = apr / 100 / 12; // Divide by 100 to get decimal value, Divide again to get decimal rate per month 
+    if (monthlyRate == 0) { // IF zero-interest loan 
+        return principal / numMonths; 
+    }
+    const factor = Math.pow(1 + monthlyRate, numMonths); // Split off exponential arithmetic for monthly payment calculation
+    return ((principal * monthlyRate * factor) / (factor - 1)); 
+}
+
+// Function - Build Amortization Schedule 
+// ACCEPTS 3: Total Principal Borrowed, APR and Number of Months
+// DEPENDS ON: ComputeMonthlyPayment 
+function BuildAmortSchedule(principal, apr, numMonths) {
+    const monthlyPayment = ComputeMonthlyPayment(principal, apr, numMonths);
+    const monthlyRate = apr / 100 / 12;
+
+    let balance = principal; 
+    let totalInterestPaid = 0;
+
+    const rows = [];
+
+    for (let period = 1; period <= numMonths; period++) {
+        const interest = balance * monthlyRate;
+        const principalPaid = monthlyPayment - interest;
+        balance = balance - principalPaid; // Balance gets lower each month or iteration
+        totalInterestPaid += interest; 
+
+        rows.push({
+            period,
+            payment: monthlyPayment,
+            principalPaid,
+            interestPaid: interest,
+            totalInterestPaid,
+            balance: balance < 0 ? 0 : balance // TERNARY - IF balance is less than 0 THEN balance gets 0, ELSE balance gets balance
+        }); 
+    }
+
+    return { monthlyPayment, rows, totalInterestPaid };
+}
