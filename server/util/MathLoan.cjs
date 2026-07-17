@@ -33,4 +33,4 @@ function NormalizeLoanInputs({ principal, termValue, termUnit, apr, isVeteran })
     };
 }
 
-export default { NormalizeLoanInputs }; 
+module.exports = { NormalizeLoanInputs }; 
